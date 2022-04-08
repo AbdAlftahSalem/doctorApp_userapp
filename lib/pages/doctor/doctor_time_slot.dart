@@ -18,6 +18,7 @@ class DoctorTimeSlot extends StatefulWidget {
       required this.doctorType,
       required this.experience})
       : super(key: key);
+
   @override
   _DoctorTimeSlotState createState() => _DoctorTimeSlotState();
 }
@@ -287,7 +288,7 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                     showYears: false,
                     initialDate: _selectedDate!,
                     firstDate: firstDate,
-                    lastDate: lastDate,
+                    lastDate: DateTime(2022, 7, 30),
                     onDateSelected: (date) {
                       setState(() {
                         _selectedDate = date;

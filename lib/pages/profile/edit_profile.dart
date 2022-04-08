@@ -1,5 +1,6 @@
 import 'package:mydoctor_user_app/constant/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:mydoctor_user_app/controllers/localDB/local_db.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -7,16 +8,23 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  String name = 'Ellison Perry';
-  String phone = '123456789';
-  String email = 'test@abc.com';
+  late String name, phone, email;
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
   var emailController = TextEditingController();
 
+  getLocalDataUser() {
+    return LocalDB.getData("User");
+  }
+
   @override
   void initState() {
     super.initState();
+
+    name = getLocalDataUser()["username"];
+    phone = getLocalDataUser()["phone"];
+    email = getLocalDataUser()["email"];
+
     nameController.text = name;
     phoneController.text = phone;
     emailController.text = email;
@@ -31,7 +39,6 @@ class _EditProfileState extends State<EditProfile> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          // return object of type Dialog
           return Dialog(
             elevation: 0.0,
             shape: RoundedRectangleBorder(
@@ -85,7 +92,11 @@ class _EditProfileState extends State<EditProfile> {
                           InkWell(
                             onTap: () {
                               setState(() {
+                                var user = getLocalDataUser();
+                                user["username"] = nameController.text;
+                                LocalDB.setData("User", user);
                                 name = nameController.text;
+                                print(getLocalDataUser());
                                 Navigator.pop(context);
                               });
                             },
@@ -275,7 +286,11 @@ class _EditProfileState extends State<EditProfile> {
                           InkWell(
                             onTap: () {
                               setState(() {
+                                var user = getLocalDataUser();
+                                user["phone"] = phoneController.text;
+                                LocalDB.setData("User", user);
                                 phone = phoneController.text;
+                                print(getLocalDataUser());
                                 Navigator.pop(context);
                               });
                             },
@@ -362,7 +377,11 @@ class _EditProfileState extends State<EditProfile> {
                           InkWell(
                             onTap: () {
                               setState(() {
+                                var user = getLocalDataUser();
+                                user["email"] = emailController.text;
+                                LocalDB.setData("User", user);
                                 email = emailController.text;
+                                print(getLocalDataUser());
                                 Navigator.pop(context);
                               });
                             },
@@ -436,7 +455,7 @@ class _EditProfileState extends State<EditProfile> {
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(width: 2.0, color: whiteColor),
                     image: DecorationImage(
-                      image: AssetImage('assets/user/user_3.jpg'),
+                      image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -629,5 +648,5 @@ class _EditProfileState extends State<EditProfile> {
           );
         });
   }
-  // Bottom Sheet for Select Options (Camera or Gallery) Ends Here
+// Bottom Sheet for Select Options (Camera or Gallery) Ends Here
 }

@@ -122,7 +122,8 @@ class _ProfileState extends State<Profile> {
                         borderRadius: BorderRadius.circular(23.0),
                         border: Border.all(width: 0.2, color: greyColor),
                         image: DecorationImage(
-                          image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"),
+                          image: NetworkImage(
+                              "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -142,11 +143,13 @@ class _ProfileState extends State<Profile> {
                       InkWell(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              PageTransition(
-                                  duration: Duration(milliseconds: 500),
-                                  type: PageTransitionType.rightToLeft,
-                                  child: EditProfile()));
+                            context,
+                            PageTransition(
+                              duration: Duration(milliseconds: 500),
+                              type: PageTransitionType.rightToLeft,
+                              child: EditProfile(),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.only(right: 15.0),

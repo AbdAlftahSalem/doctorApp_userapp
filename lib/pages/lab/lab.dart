@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:mydoctor_user_app/constant/constant.dart';
 import 'package:flutter/material.dart';
@@ -131,10 +132,23 @@ class _LabState extends State<Lab> {
                           color: Colors.grey[300]!,
                         ),
                       ],
-                      image: DecorationImage(
-                        image: NetworkImage(widget.lab.image),
-                        fit: BoxFit.cover,
+                      // image: DecorationImage(
+                      //   image: NetworkImage(),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.lab.image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          CircularProgressIndicator(),
+                        ],
                       ),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.warning_amber_outlined),
                     ),
                   ),
                   widthSpace,
@@ -182,10 +196,6 @@ class _LabState extends State<Lab> {
   }
 
   address() {
-    final CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962),
-      zoom: 14.4746,
-    );
     return Container(
       padding: EdgeInsets.all(fixPadding * 2.0),
       child: Column(
@@ -219,7 +229,19 @@ class _LabState extends State<Lab> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
-              child: Image.network(widget.lab.detailImage, fit: BoxFit.cover),
+              child: CachedNetworkImage(
+                imageUrl: widget.lab.detailImage,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.warning_amber_outlined),
+              ),
             ),
           ),
         ],
