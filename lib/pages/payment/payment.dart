@@ -4,20 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mydoctor_user_app/constant/constant.dart';
 import 'package:mydoctor_user_app/controllers/localDB/local_db.dart';
+import 'package:mydoctor_user_app/model/doctors_model.dart';
 import 'package:mydoctor_user_app/pages/screens.dart';
 import 'package:flutter/material.dart';
 
 class Payment extends StatefulWidget {
-  final String? doctorName, doctorType, doctorImage, doctorExp, time, date;
+  DoctorModel doctorModel;
+  String date, time;
 
-  Payment({
-    required this.doctorName,
-    required this.doctorType,
-    required this.doctorImage,
-    required this.doctorExp,
-    required this.time,
-    required this.date,
-  });
+  Payment({required this.doctorModel, required this.date, required this.time});
 
   @override
   _PaymentState createState() => _PaymentState();
@@ -116,10 +111,10 @@ class _PaymentState extends State<Payment> {
                   .collection("Active Appointments")
                   .doc(id)
                   .set({
-                "doctorName": widget.doctorName,
-                "doctorType": widget.doctorType,
-                "doctorImage": widget.doctorImage,
-                "doctorExp": widget.doctorExp,
+                "doctorName": widget.doctorModel.name,
+                "doctorType": widget.doctorModel.typeDoctor,
+                "doctorImage": widget.doctorModel.image,
+                "doctorExp": widget.doctorModel.experience,
                 "time": widget.time,
                 "date": widget.date,
                 "id": id,

@@ -79,80 +79,92 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 70.0),
                     GetBuilder<AuthController>(
-                      init: AuthController(),
-                      builder: (ctr) {
-                        return Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Container(
-                            padding: EdgeInsets.only(left: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200]!.withOpacity(0.3),
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        init: AuthController(),
+                        builder: (ctr) {
+                          return Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Container(
+                              padding: EdgeInsets.only(left: 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200]!.withOpacity(0.3),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: InternationalPhoneNumberInput(
+                                textStyle: inputLoginTextStyle,
+                                autoValidateMode: AutovalidateMode.disabled,
+                                selectorTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                initialValue: number,
+                                textFieldController: controller,
+                                inputBorder: InputBorder.none,
+                                inputDecoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(left: 0.0, bottom: 15.0),
+                                  hintText: 'Phone Number',
+                                  hintStyle: inputLoginTextStyle,
+                                  border: InputBorder.none,
+                                ),
+                                selectorConfig: SelectorConfig(
+                                  selectorType: PhoneInputSelectorType.DIALOG,
+                                ),
+                                onInputChanged: (PhoneNumber number) {
+                                  ctr.onPhoneNumberChange(
+                                      number: number.phoneNumber.toString(),
+                                      dialCode: number.dialCode.toString());
+                                },
+                              ),
                             ),
-                            child: InternationalPhoneNumberInput(
-                              textStyle: inputLoginTextStyle,
-                              autoValidateMode: AutovalidateMode.disabled,
-                              selectorTextStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              initialValue: number,
-                              textFieldController: controller,
-                              inputBorder: InputBorder.none,
-                              inputDecoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(left: 0.0, bottom: 15.0),
-                                hintText: 'Phone Number',
-                                hintStyle: inputLoginTextStyle,
-                                border: InputBorder.none,
-                              ),
-                              selectorConfig: SelectorConfig(
-                                selectorType: PhoneInputSelectorType.DIALOG,
-                              ),
-                              onInputChanged: (PhoneNumber number) {
-                                ctr.onPhoneNumberChange(number: number.phoneNumber.toString(), dialCode: number.dialCode.toString());
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    ),
+                          );
+                        }),
                     SizedBox(height: 30.0),
                     GetBuilder<AuthController>(
                         init: AuthController(),
                         builder: (controller) {
-                          return Padding(
-                            padding: EdgeInsets.only(right: 20.0, left: 20.0),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(30.0),
-                              onTap: () async {
-                                await controller.sendOTP();
-                              },
-                              child: Container(
-                                height: 50.0,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.bottomRight,
-                                    stops: [0.1, 0.5, 0.9],
-                                    colors: [
-                                      Colors.blue[300]!.withOpacity(0.8),
-                                      Colors.blue[500]!.withOpacity(0.8),
-                                      Colors.blue[800]!.withOpacity(0.8),
-                                    ],
+                          return controller.sendCode
+                              ? Padding(
+                                  padding:
+                                      EdgeInsets.only(right: 20.0, left: 20.0),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    onTap: () async {
+                                      await controller.sendOTP();
+                                    },
+                                    child: Container(
+                                      height: 50.0,
+                                      width: double.infinity,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.bottomRight,
+                                          stops: [0.1, 0.5, 0.9],
+                                          colors: [
+                                            Colors.blue[300]!.withOpacity(0.8),
+                                            Colors.blue[500]!.withOpacity(0.8),
+                                            Colors.blue[800]!.withOpacity(0.8),
+                                          ],
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Continue',
+                                        style: inputLoginTextStyle,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  'Continue',
-                                  style: inputLoginTextStyle,
-                                ),
-                              ),
-                            ),
-                          );
+                                )
+                              : SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
                         }),
                     SizedBox(height: 10.0),
                     Text(

@@ -22,6 +22,7 @@ class AuthController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+  bool sendCode = true;
 
   onPhoneNumberChange({required String number, required String dialCode}) {
     phoneNumber = number;
@@ -31,22 +32,28 @@ class AuthController extends GetxController {
   }
 
   sendOTP() async {
-    print(phoneNumber);
+    sendCode = false;
+    update();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: "$phoneNumber",
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {
         Get.snackbar("Message", "Some thing error");
-        print(e);
+        sendCode = true;
+        update();
       },
       codeSent: (String verificationId, int? resendToken) {
         this.verificationId = verificationId;
+        sendCode = true;
+        update();
+        Get.to(() => OTPScreen());
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         this.verificationId = verificationId;
+        sendCode = true;
+        update();
       },
     );
-    Get.to(() => OTPScreen());
   }
 
   verifyOTp(String otp) async {
@@ -77,7 +84,10 @@ class AuthController extends GetxController {
         "id": id,
         "status": "online",
       };
-      await FirebaseFirestore.instance.collection("Users").doc(id).set(userData);
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(id)
+          .set(userData);
       await LocalDB.setData("User", userData);
       // Navigator.push(
       //     context,

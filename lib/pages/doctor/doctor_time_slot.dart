@@ -1,5 +1,6 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:mydoctor_user_app/constant/constant.dart';
+import 'package:mydoctor_user_app/model/doctors_model.dart';
 import 'package:mydoctor_user_app/pages/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,15 +10,9 @@ const labelDate = 'Date';
 const labelWeekDay = 'Week Day';
 
 class DoctorTimeSlot extends StatefulWidget {
-  final String? doctorName, doctorImage, doctorType, experience;
+  DoctorModel doctorModel;
 
-  const DoctorTimeSlot(
-      {Key? key,
-      required this.doctorName,
-      required this.doctorImage,
-      required this.doctorType,
-      required this.experience})
-      : super(key: key);
+  DoctorTimeSlot({required this.doctorModel});
 
   @override
   _DoctorTimeSlotState createState() => _DoctorTimeSlotState();
@@ -146,18 +141,15 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                   borderRadius: BorderRadius.circular(15.0),
                   onTap: () {
                     Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            duration: Duration(milliseconds: 600),
-                            child: ConsultationDetail(
-                              doctorName: widget.doctorName,
-                              doctorType: widget.doctorType,
-                              doctorExp: widget.experience,
-                              doctorImage: widget.doctorImage,
-                              date: selectedDate,
-                              time: selectedTime,
-                            )));
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        duration: Duration(milliseconds: 600),
+                        child: ConsultationDetail(
+                          doctorModel: widget.doctorModel, date: selectedDate!, time: selectedTime!,
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
                     width: double.infinity,
@@ -195,7 +187,7 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Hero(
-                          tag: widget.doctorImage!,
+                          tag: widget.doctorModel.image,
                           child: Container(
                             width: 76.0,
                             height: 76.0,
@@ -212,7 +204,7 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                                 ),
                               ],
                               image: DecorationImage(
-                                image: NetworkImage(widget.doctorImage!),
+                                image: NetworkImage(widget.doctorModel.image),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
@@ -228,7 +220,7 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      '${widget.doctorName}',
+                                      '${widget.doctorModel.name}',
                                       style: blackNormalBoldTextStyle,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -237,22 +229,17 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     PageTransition(
-                                          //         duration: Duration(
-                                          //             milliseconds: 600),
-                                          //         type: PageTransitionType.fade,
-                                          //         child: DoctorProfile(
-                                          //           doctorImage:
-                                          //               widget.doctorImage,
-                                          //           doctorName:
-                                          //               widget.doctorName,
-                                          //           doctorType:
-                                          //               widget.doctorType,
-                                          //           experience:
-                                          //               widget.experience,
-                                          //         )));
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              duration:
+                                                  Duration(milliseconds: 600),
+                                              type: PageTransitionType.fade,
+                                              child: DoctorProfile(
+                                                doctorModel: widget.doctorModel,
+                                              ),
+                                            ),
+                                          );
                                         },
                                         child: Text(
                                           'View Profile',
@@ -265,12 +252,12 @@ class _DoctorTimeSlotState extends State<DoctorTimeSlot> {
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                widget.doctorType!,
+                                widget.doctorModel.typeDoctor,
                                 style: greyNormalTextStyle,
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                '${widget.experience}',
+                                widget.doctorModel.experience,
                                 style: primaryColorNormalTextStyle,
                               ),
                               SizedBox(height: 7.0),

@@ -197,10 +197,7 @@ class _DoctorListState extends State<DoctorList> {
                                         duration: Duration(milliseconds: 600),
                                         type: PageTransitionType.fade,
                                         child: DoctorTimeSlot(
-                                          doctorImage: item.image,
-                                          doctorName: item.name,
-                                          doctorType: widget.type,
-                                          experience: item.experience,
+                                          doctorModel: item,
                                         ),
                                       ),
                                     );
@@ -229,10 +226,7 @@ class _DoctorListState extends State<DoctorList> {
                                         duration: Duration(milliseconds: 600),
                                         type: PageTransitionType.fade,
                                         child: DoctorTimeSlot(
-                                          doctorImage: item.image,
-                                          doctorName: item.name,
-                                          doctorType: widget.type,
-                                          experience: item.experience,
+                                          doctorModel: item,
                                         ),
                                       ),
                                     );

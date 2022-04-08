@@ -1,10 +1,13 @@
 import 'package:mydoctor_user_app/constant/constant.dart';
+import 'package:mydoctor_user_app/model/review_model.dart';
 import 'package:mydoctor_user_app/widget/column_builder.dart';
 import 'package:flutter/material.dart';
 
 class Review extends StatefulWidget {
-  final reviewList;
-  Review({Key? key, required this.reviewList}) : super(key: key);
+  List<ReviewModel> review;
+
+  Review({required this.review});
+
   @override
   _ReviewState createState() => _ReviewState();
 }
@@ -19,7 +22,7 @@ class _ReviewState extends State<Review> {
         elevation: 1.0,
         titleSpacing: 0.0,
         title: Text(
-          '${widget.reviewList.length} review found',
+          '${widget.review.length} review found',
           style: appBarTitleTextStyle,
         ),
         leading: IconButton(
@@ -35,12 +38,12 @@ class _ReviewState extends State<Review> {
           heightSpace,
           heightSpace,
           ColumnBuilder(
-            itemCount: widget.reviewList.length,
+            itemCount: widget.review.length,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             itemBuilder: (context, index) {
-              final item = widget.reviewList[index];
+              final item = widget.review[index];
               return Container(
                 margin: (index == 0)
                     ? EdgeInsets.symmetric(horizontal: fixPadding * 2.0)
@@ -74,7 +77,7 @@ class _ReviewState extends State<Review> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(35.0),
                             image: DecorationImage(
-                              image: AssetImage(item['image']),
+                              image: NetworkImage(item.image),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -87,16 +90,16 @@ class _ReviewState extends State<Review> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item['name'],
+                                item.name,
                                 style: blackNormalBoldTextStyle,
                               ),
                               SizedBox(height: 5.0),
                               Text(
-                                item['time'],
+                                item.date,
                                 style: greySmallTextStyle,
                               ),
                               SizedBox(height: 5.0),
-                              ratingBar(item['rating']),
+                              ratingBar(item.numberStar),
                             ],
                           ),
                         ),
@@ -104,7 +107,7 @@ class _ReviewState extends State<Review> {
                     ),
                     heightSpace,
                     Text(
-                      item['review'],
+                      item.content,
                       style: blackNormalTextStyle,
                     ),
                   ],

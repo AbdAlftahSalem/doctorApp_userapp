@@ -1,4 +1,7 @@
+import 'package:get/get.dart';
 import 'package:mydoctor_user_app/constant/constant.dart';
+import 'package:mydoctor_user_app/controllers/doctor_profile_controller.dart';
+import 'package:mydoctor_user_app/model/doctors_model.dart';
 import 'package:mydoctor_user_app/widget/column_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,196 +9,149 @@ import 'package:page_transition/page_transition.dart';
 import 'package:mydoctor_user_app/pages/screens.dart';
 
 class DoctorProfile extends StatefulWidget {
-  final String? doctorImage, doctorName, doctorType, experience;
+  DoctorModel doctorModel;
 
-  const DoctorProfile(
-      {Key? key,
-      required this.doctorImage,
-      required this.doctorName,
-      required this.doctorType,
-      required this.experience})
-      : super(key: key);
+  DoctorProfile({required this.doctorModel});
+
   @override
   _DoctorProfileState createState() => _DoctorProfileState();
 }
 
 class _DoctorProfileState extends State<DoctorProfile> {
-  late Set<Marker> markers;
-
-  final ratingList = [
-    {
-      'name': 'Ersel',
-      'image': 'assets/user/user_1.jpg',
-      'rating': 5,
-      'review': 'Really good doctor.',
-      'time': 'August 2020'
-    },
-    {
-      'name': 'Jane',
-      'image': 'assets/user/user_2.jpg',
-      'rating': 5,
-      'review': 'Great doctor i have ever seen.',
-      'time': 'August 2020'
-    },
-    {
-      'name': 'Apollonia',
-      'image': 'assets/user/user_3.jpg',
-      'rating': 5,
-      'review': 'Excellent.',
-      'time': 'July 2020'
-    },
-    {
-      'name': 'Beatriz',
-      'image': 'assets/user/user_4.jpg',
-      'rating': 5,
-      'review': 'Really nice!',
-      'time': 'June 2020'
-    },
-    {
-      'name': 'Linnea',
-      'image': 'assets/user/user_5.jpg',
-      'rating': 5,
-      'review': 'Nice experience.',
-      'time': 'May 2020'
-    },
-    {
-      'name': 'Ronan',
-      'image': 'assets/user/user_6.jpg',
-      'rating': 5,
-      'review': 'Fantastic.',
-      'time': 'April 2020'
-    },
-    {
-      'name': 'Brayden',
-      'image': 'assets/user/user_7.jpg',
-      'rating': 5,
-      'review': 'Very experienced. doctor',
-      'time': 'Fabruary 2020'
-    },
-    {
-      'name': 'Hugo',
-      'image': 'assets/user/user_8.jpg',
-      'rating': 5,
-      'review': 'Good.',
-      'time': 'January 2020'
-    }
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    markers = Set.from([]);
-  }
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: darkBlueColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            height: (height * 0.36),
-            color: Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: fixPadding * 2.0),
-            alignment: Alignment.bottomRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  width: (width - fixPadding * 11.0) / 2.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.doctorName!,
-                        style: whiteColorHeadingTextStyle,
-                      ),
-                      heightSpace,
-                      Text(
-                        widget.doctorType!,
-                        style: whiteColorSmallTextStyle,
-                      ),
-                      heightSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.star, color: Colors.lime, size: 20.0),
-                          SizedBox(width: 5.0),
-                          Text(
-                            '4.5 Rating',
-                            style: whiteColorNormalTextStyle,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Hero(
-                  tag: widget.doctorImage!,
-                  child: Image.asset(
-                    widget.doctorImage!,
-                    width: (width) / 2.0,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          DraggableScrollableSheet(
-            initialChildSize: 0.6,
-            minChildSize: 0.6,
-            maxChildSize: 1.0,
-            builder: (BuildContext context, myscrollController) {
-              return ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
-                child: Container(
+    return GetBuilder<DoctorProfileController>(
+        init: DoctorProfileController(),
+        builder: (controller) {
+          return Scaffold(
+            backgroundColor: darkBlueColor,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
                   color: whiteColor,
-                  padding: EdgeInsets.all(fixPadding * 2.0),
-                  child: ListView(
-                    controller: myscrollController,
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            body: controller.reviewList.length == 0
+                ? Center(child: CircularProgressIndicator())
+                : Stack(
                     children: [
-                      Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                        style: greyNormalTextStyle,
-                        textAlign: TextAlign.justify,
+                      Container(
+                        height: (height * 0.36),
+                        color: Colors.transparent,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: fixPadding * 2.0),
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: (width - fixPadding * 11.0) / 2.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.doctorModel.name,
+                                    style: whiteColorHeadingTextStyle,
+                                  ),
+                                  heightSpace,
+                                  Text(
+                                    widget.doctorModel.typeDoctor,
+                                    style: whiteColorSmallTextStyle,
+                                  ),
+                                  heightSpace,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.star,
+                                          color: Colors.lime, size: 20.0),
+                                      SizedBox(width: 5.0),
+                                      Text(
+                                        '4.5 Rating',
+                                        style: whiteColorNormalTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Hero(
+                              tag: widget.doctorModel.image,
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 80),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    widget.doctorModel.image,
+                                    width: (width) / 2.0,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      heightSpace,
-                      heightSpace,
-                      experience(),
-                      heightSpace,
-                      heightSpace,
-                      availability(),
-                      heightSpace,
-                      heightSpace,
-                      location(),
-                      heightSpace,
-                      heightSpace,
-                      review(),
+                      DraggableScrollableSheet(
+                        initialChildSize: 0.6,
+                        minChildSize: 0.6,
+                        maxChildSize: 1.0,
+                        builder: (BuildContext context, myscrollController) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(30.0)),
+                            child: Container(
+                              color: whiteColor,
+                              padding: EdgeInsets.all(fixPadding * 2.0),
+                              child: ListView(
+                                controller: myscrollController,
+                                children: [
+                                  Text(
+                                    'Recognizd Postgraduate teacher for M.D. Physiology course. - Recognized University examiner for M.D. Physiology examination. - Professor in Charge of Central Library and Associate Professor, Seth G. S. Medical College and K.E.M. Hospital, Mumbai - 400 012. - Life Member, Association of Physiologists and Pharmacologists of India (APPI)',
+                                    style: greyNormalTextStyle,
+                                    textAlign: TextAlign.justify,
+                                  ),
+                                  heightSpace,
+                                  heightSpace,
+                                  experience(),
+                                  heightSpace,
+                                  heightSpace,
+                                  availability(),
+                                  heightSpace,
+                                  heightSpace,
+                                  SizedBox(
+                                    height: 250,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        "assets/map.jpeg",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  heightSpace,
+                                  heightSpace,
+                                  review(controller),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   experience() {
@@ -209,7 +165,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
         ),
         heightSpace,
         Text(
-          '${widget.experience} Years',
+          widget.doctorModel.experience,
           style: greyNormalTextStyle,
         ),
       ],
@@ -234,52 +190,52 @@ class _DoctorProfileState extends State<DoctorProfile> {
     );
   }
 
-  location() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Location',
-          style: blackHeadingTextStyle,
-        ),
-        heightSpace,
-        Container(
-          width: double.infinity,
-          height: 250.0,
-          decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                blurRadius: 1.0,
-                spreadRadius: 1.0,
-                color: Colors.grey[300]!,
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: GoogleMap(
-              markers: markers,
-              onMapCreated: (GoogleMapController controller) {
-                Marker m = Marker(
-                    markerId: MarkerId('1'),
-                    position: LatLng(51.361005, -0.1746394));
-                setState(() {
-                  markers.add(m);
-                });
-              },
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(51.361005, -0.1746394), zoom: 8),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // location() {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.start,
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         'Location',
+  //         style: blackHeadingTextStyle,
+  //       ),
+  //       heightSpace,
+  //       Container(
+  //         width: double.infinity,
+  //         height: 250.0,
+  //         decoration: BoxDecoration(
+  //           color: whiteColor,
+  //           borderRadius: BorderRadius.circular(15.0),
+  //           boxShadow: <BoxShadow>[
+  //             BoxShadow(
+  //               blurRadius: 1.0,
+  //               spreadRadius: 1.0,
+  //               color: Colors.grey[300]!,
+  //             ),
+  //           ],
+  //         ),
+  //         child: ClipRRect(
+  //           borderRadius: BorderRadius.circular(15.0),
+  //           child: GoogleMap(
+  //             markers: markers,
+  //             onMapCreated: (GoogleMapController controller) {
+  //               Marker m = Marker(
+  //                   markerId: MarkerId('1'),
+  //                   position: LatLng(51.361005, -0.1746394));
+  //               setState(() {
+  //                 markers.add(m);
+  //               });
+  //             },
+  //             initialCameraPosition: CameraPosition(
+  //                 target: LatLng(51.361005, -0.1746394), zoom: 8),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  review() {
+  review(DoctorProfileController controller) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +251,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           itemBuilder: (context, index) {
-            final item = ratingList[index];
+            final item = controller.reviewList[index];
             return Container(
               margin: (index == 0)
                   ? EdgeInsets.symmetric(horizontal: 2.0)
@@ -327,7 +283,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(35.0),
                           image: DecorationImage(
-                            image: AssetImage(item['image'] as String),
+                            image: NetworkImage(item.image),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -340,16 +296,16 @@ class _DoctorProfileState extends State<DoctorProfile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item['name'] as String,
+                              item.name,
                               style: blackNormalBoldTextStyle,
                             ),
                             SizedBox(height: 5.0),
                             Text(
-                              item['time'] as String,
+                              item.date,
                               style: greySmallTextStyle,
                             ),
                             SizedBox(height: 5.0),
-                            ratingBar(item['rating']),
+                            ratingBar(item.numberStar),
                           ],
                         ),
                       ),
@@ -357,7 +313,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                   ),
                   heightSpace,
                   Text(
-                    item['review'] as String,
+                    item.content,
                     style: blackNormalTextStyle,
                   ),
                 ],
@@ -371,13 +327,15 @@ class _DoctorProfileState extends State<DoctorProfile> {
           borderRadius: BorderRadius.circular(15.0),
           onTap: () {
             Navigator.push(
-                context,
-                PageTransition(
-                    duration: Duration(milliseconds: 600),
-                    type: PageTransitionType.rightToLeftWithFade,
-                    child: Review(
-                      reviewList: ratingList,
-                    )));
+              context,
+              PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.rightToLeftWithFade,
+                child: Review(
+                  review: controller.reviewList,
+                ),
+              ),
+            );
           },
           child: Container(
             padding: EdgeInsets.all(fixPadding * 1.5),

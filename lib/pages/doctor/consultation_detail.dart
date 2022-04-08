@@ -1,21 +1,16 @@
 import 'package:mydoctor_user_app/constant/constant.dart';
+import 'package:mydoctor_user_app/model/doctors_model.dart';
 import 'package:mydoctor_user_app/pages/screens.dart';
 import 'package:mydoctor_user_app/widget/column_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ConsultationDetail extends StatefulWidget {
-  final String? doctorName, doctorType, doctorImage, doctorExp, time, date;
+  DoctorModel doctorModel;
+  String date , time;
 
-  const ConsultationDetail(
-      {Key? key,
-      required this.doctorName,
-      required this.doctorType,
-      required this.doctorImage,
-      required this.doctorExp,
-      required this.time,
-      required this.date})
-      : super(key: key);
+
+  ConsultationDetail({required this.doctorModel,required this.date,required this.time});
 
   @override
   _ConsultationDetailState createState() => _ConsultationDetailState();
@@ -29,13 +24,6 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.doctorName);
-    print(widget.doctorType);
-    print(widget.doctorImage);
-    print(widget.doctorExp);
-    print(widget.time);
-    print(widget.date);
-
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -72,12 +60,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                 duration: Duration(milliseconds: 600),
                 // final String? doctorName, doctorType, doctorImage, doctorExp, time, date;
                 child: Payment(
-                  doctorType: widget.doctorType,
-                  doctorName: widget.doctorName,
-                  time: widget.time,
-                  doctorImage: widget.doctorImage,
-                  doctorExp: widget.doctorExp,
-                  date: widget.date,
+                  doctorModel: widget.doctorModel, time: widget.time, date: widget.date,
                 ),
               ),
             );
@@ -118,7 +101,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Hero(
-                          tag: widget.doctorImage!,
+                          tag: widget.doctorModel.image,
                           child: Container(
                             width: 76.0,
                             height: 76.0,
@@ -135,7 +118,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                                 ),
                               ],
                               image: DecorationImage(
-                                image: NetworkImage(widget.doctorImage!),
+                                image: NetworkImage(widget.doctorModel.image),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
@@ -151,7 +134,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      '${widget.doctorName}',
+                                      widget.doctorModel.name,
                                       style: blackNormalBoldTextStyle,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -167,14 +150,8 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                                                       milliseconds: 600),
                                                   type: PageTransitionType.fade,
                                                   child: DoctorProfile(
-                                                    doctorImage:
-                                                        widget.doctorImage,
-                                                    doctorName:
-                                                        widget.doctorName,
-                                                    doctorType:
-                                                        widget.doctorType,
-                                                    experience:
-                                                        widget.doctorExp,
+                                                    doctorModel:
+                                                        widget.doctorModel,
                                                   )));
                                         },
                                         child: Text(
@@ -188,12 +165,12 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                widget.doctorType!,
+                                widget.doctorModel.typeDoctor,
                                 style: greyNormalTextStyle,
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                '${widget.doctorExp} Years Experience',
+                                widget.doctorModel.experience,
                                 style: primaryColorNormalTextStyle,
                               ),
                             ],
@@ -228,7 +205,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                             ),
                             widthSpace,
                             Text(
-                              widget.date!,
+                              widget.date,
                               style: blackNormalTextStyle,
                             ),
                           ],
@@ -244,7 +221,7 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
                             ),
                             widthSpace,
                             Text(
-                              widget.time!,
+                              widget.time,
                               style: blackNormalTextStyle,
                             ),
                           ],
