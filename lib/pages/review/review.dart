@@ -50,7 +50,8 @@ class _ReviewState extends State<Review> {
                     : EdgeInsets.only(
                         top: fixPadding * 2.0,
                         right: fixPadding * 2.0,
-                        left: fixPadding * 2.0),
+                        left: fixPadding * 2.0,
+                      ),
                 padding: EdgeInsets.all(fixPadding * 2.0),
                 decoration: BoxDecoration(
                   color: whiteColor,

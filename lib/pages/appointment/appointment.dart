@@ -14,9 +14,6 @@ class Appointment extends StatefulWidget {
 }
 
 class _AppointmentState extends State<Appointment> {
-  // deleteAppointmentDialog(AppointmentModel appointment) {
-  //   ;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -245,8 +242,7 @@ class _AppointmentState extends State<Appointment> {
                         ),
                         InkWell(
                           onTap: () async {
-                            var user;
-                            controller.cancelOrder(item);
+                            await controller.cancelOrder(item);
 
                             Navigator.pop(context);
                           },

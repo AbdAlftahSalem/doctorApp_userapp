@@ -36,18 +36,19 @@ class _SplashScreenState extends State<SplashScreen>
 
     Timer(
       Duration(seconds: 3),
-
-      () => userData == null ? Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Login(),
-        ),
-      ) : Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BottomBar(),
-        ),
-      ) ,
+      () => userData == null
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Login(),
+              ),
+            )
+          : Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BottomBar(),
+              ),
+            ),
     );
   }
 
@@ -74,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50.0),
                   image: DecorationImage(
-                    image: AssetImage('assets/icon.png'),
+                    image: AssetImage('assets/logo.jpeg'),
                     fit: BoxFit.cover,
                   ),
                 ),

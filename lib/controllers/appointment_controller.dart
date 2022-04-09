@@ -24,6 +24,7 @@ class AppointmentController extends GetxController {
         .listen((event) {
       appointmentList = [];
       event.docs.forEach((element) {
+        print(element.data());
         appointmentList.add(AppointmentModel.fromMap(element.data()));
         update();
       });
@@ -48,6 +49,9 @@ class AppointmentController extends GetxController {
   }
 
   cancelOrder(AppointmentModel appointment) async {
+    //    USER
+
+    // Add Appointments to Cancel Appointments
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(getLocalDB()["id"])
@@ -55,10 +59,20 @@ class AppointmentController extends GetxController {
         .doc(appointment.id)
         .set(appointment.toMap());
 
+    // Delete Appointments from Active Appointments
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(getLocalDB()["id"])
         .collection("Active Appointments")
+        .doc(appointment.id)
+        .delete();
+
+    // DOCTOR
+
+    await FirebaseFirestore.instance
+        .collection("Doctors")
+        .doc(appointment.idDoctor)
+        .collection("Appointments")
         .doc(appointment.id)
         .delete();
 

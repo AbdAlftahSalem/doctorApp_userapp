@@ -455,7 +455,8 @@ class _EditProfileState extends State<EditProfile> {
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(width: 2.0, color: whiteColor),
                     image: DecorationImage(
-                      image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"),
+                      image: NetworkImage(
+                          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png"),
                       fit: BoxFit.cover,
                     ),
                   ),

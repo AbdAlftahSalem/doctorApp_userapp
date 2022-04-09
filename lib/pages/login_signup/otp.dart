@@ -332,42 +332,42 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                   ),
                   SizedBox(height: 30.0),
-                  Padding(
-                    padding: EdgeInsets.only(right: 20.0, left: 20.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(30.0),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                duration: Duration(milliseconds: 600),
-                                type: PageTransitionType.fade,
-                                child: Register()));
-                      },
-                      child: Container(
-                        height: 50.0,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0.1, 0.5, 0.9],
-                            colors: [
-                              Colors.blue[300]!.withOpacity(0.8),
-                              Colors.blue[500]!.withOpacity(0.8),
-                              Colors.blue[800]!.withOpacity(0.8),
-                            ],
+                  GetBuilder<AuthController>(
+                      init: AuthController(),
+                      builder: (controller) {
+                        return Padding(
+                          padding: EdgeInsets.only(right: 20.0, left: 20.0),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(30.0),
+                            onTap: () {
+                              controller.verifyOTp(
+                                  "${controller.otp1}${controller.otp2}${controller.otp3}${controller.otp4}${controller.otp5}${controller.otp6}");
+                            },
+                            child: Container(
+                              height: 50.0,
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30.0),
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.bottomRight,
+                                  stops: [0.1, 0.5, 0.9],
+                                  colors: [
+                                    Colors.blue[300]!.withOpacity(0.8),
+                                    Colors.blue[500]!.withOpacity(0.8),
+                                    Colors.blue[800]!.withOpacity(0.8),
+                                  ],
+                                ),
+                              ),
+                              child: Text(
+                                'Submit',
+                                style: inputLoginTextStyle,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          'Submit',
-                          style: inputLoginTextStyle,
-                        ),
-                      ),
-                    ),
-                  ),
+                        );
+                      }),
                 ],
               ),
             ),

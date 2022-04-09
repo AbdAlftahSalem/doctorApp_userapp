@@ -1,5 +1,12 @@
 class AppointmentModel {
-  String date, doctorName, doctorType, doctorExp, time, doctorImage, id;
+  String date,
+      doctorName,
+      doctorType,
+      doctorExp,
+      time,
+      doctorImage,
+      id,
+      idDoctor;
 
   AppointmentModel({
     required this.date,
@@ -9,6 +16,7 @@ class AppointmentModel {
     required this.time,
     required this.doctorImage,
     required this.id,
+    required this.idDoctor,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +28,7 @@ class AppointmentModel {
       'time': this.time,
       'doctorImage': this.doctorImage,
       'id': this.id,
+      'idDoctor': this.idDoctor,
     };
   }
 
@@ -32,6 +41,7 @@ class AppointmentModel {
       time: map['time'] as String,
       doctorImage: map['doctorImage'] as String,
       id: map['id'] as String,
+      idDoctor: map['idDoctor'] as String,
     );
   }
 }

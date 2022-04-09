@@ -58,7 +58,6 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
               PageTransition(
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 600),
-                // final String? doctorName, doctorType, doctorImage, doctorExp, time, date;
                 child: Payment(
                   doctorModel: widget.doctorModel, time: widget.time, date: widget.date,
                 ),

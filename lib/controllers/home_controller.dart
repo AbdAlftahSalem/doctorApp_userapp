@@ -33,9 +33,13 @@ class HomeController extends GetxController {
   }
 
   void launchURL(String phone) async {
-    await launch('tel:$phone'); throw Get.snackbar("Message", "Could not launch $phone");
+    try {
+      await launch('tel:$phone');
+    } catch (e) {
+      print(e);
+      Get.snackbar("Message", e.toString());
+    }
   }
-
 
   @override
   void onInit() async {

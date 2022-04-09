@@ -31,6 +31,19 @@ class AuthController extends GetxController {
     update();
   }
 
+  // checkPhoneNum() async {
+  //   FirebaseFirestore.instance
+  //       .collection("Users")
+  //       .where("phone", isEqualTo: phoneNumber)
+  //       .get()
+  //       .then((value) {
+  //     if (value.docs.length == 0) {
+  //     } else {
+  //       Get.snackbar("Message", "This phone is already sign in");
+  //     }
+  //   });
+  // }
+
   sendOTP() async {
     sendCode = false;
     update();
@@ -38,7 +51,8 @@ class AuthController extends GetxController {
       phoneNumber: "$phoneNumber",
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {
-        Get.snackbar("Message", "Some thing error");
+        print("The error is $e");
+        Get.snackbar("Message", "Some thing error please try again");
         sendCode = true;
         update();
       },
@@ -46,7 +60,7 @@ class AuthController extends GetxController {
         this.verificationId = verificationId;
         sendCode = true;
         update();
-        Get.to(() => OTPScreen());
+    Get.to(() => OTPScreen());
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         this.verificationId = verificationId;
@@ -64,8 +78,21 @@ class AuthController extends GetxController {
       PhoneAuthProvider.credential(
           verificationId: this.verificationId, smsCode: otp),
     );
+
     if (credential.user != null) {
-      Get.to(() => Register());
+      FirebaseFirestore.instance
+          .collection("Users")
+          .where("phone", isEqualTo: "+970598045064")
+          .get()
+          .then((value) {
+        if (value.docs.length == 0) {
+          Get.to(() => Register());
+        } else {
+          LocalDB.setData("User", value.docs[0].data());
+          print(LocalDB.getData("User"));
+          Get.to(() => BottomBar());
+        }
+      });
     } else {
       Get.snackbar("Message", "Please enter valid OTP");
     }

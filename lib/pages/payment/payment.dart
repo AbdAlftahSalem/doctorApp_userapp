@@ -103,22 +103,43 @@ class _PaymentState extends State<Payment> {
           child: InkWell(
             borderRadius: BorderRadius.circular(15.0),
             onTap: () async {
-              var user = LocalDB.getData("User");
               String id = generateRandomString(10);
+              var user = LocalDB.getData("User");
+              var userData = {
+                "doctorName": widget.doctorModel.name,
+                "doctorType": widget.doctorModel.typeDoctor,
+                "doctorImage": widget.doctorModel.image,
+                "doctorExp": widget.doctorModel.experience,
+                "idDoctor": widget.doctorModel.id,
+                "time": widget.time,
+                "date": widget.date,
+                "id": id,
+              };
+
+              var doctorData = {
+                "userName": user["username"],
+                "painUser": widget.doctorModel.typeDoctor,
+                "userImage":
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1024px-User-avatar.svg.png",
+                "idUser": user["id"],
+                "time": widget.time,
+                "date": widget.date,
+                "idAppointment": id,
+              };
+
               await FirebaseFirestore.instance
                   .collection("Users")
                   .doc(user["id"])
                   .collection("Active Appointments")
                   .doc(id)
-                  .set({
-                "doctorName": widget.doctorModel.name,
-                "doctorType": widget.doctorModel.typeDoctor,
-                "doctorImage": widget.doctorModel.image,
-                "doctorExp": widget.doctorModel.experience,
-                "time": widget.time,
-                "date": widget.date,
-                "id": id,
-              });
+                  .set(userData);
+
+              await FirebaseFirestore.instance
+                  .collection("Doctors")
+                  .doc(widget.doctorModel.id)
+                  .collection("Appointments")
+                  .doc(id)
+                  .set(doctorData);
 
               successOrderDialog();
             },
