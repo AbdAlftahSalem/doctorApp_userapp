@@ -16,7 +16,12 @@ class AuthController extends GetxController {
   String? phoneIsoCode;
   String? dialCode;
   String verificationId = "";
-  String otp1 = "", otp2 = "", otp3 = "", otp4 = "", otp5 = "", otp6 = "";
+  String otp1 = "",
+      otp2 = "",
+      otp3 = "",
+      otp4 = "",
+      otp5 = "",
+      otp6 = "";
   bool finishTarget = false;
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -60,7 +65,7 @@ class AuthController extends GetxController {
         this.verificationId = verificationId;
         sendCode = true;
         update();
-    Get.to(() => OTPScreen());
+        Get.to(() => OTPScreen());
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         this.verificationId = verificationId;

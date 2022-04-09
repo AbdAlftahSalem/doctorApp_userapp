@@ -77,7 +77,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           controller.getDoctor(widget.idDoctor);
           controller.getMessage(widget.idDoctor);
 
-          idUser = controller.getIdUser()["id"];
           return controller.doctorModel.name.isEmpty
               ? Scaffold(body: Center(child: CircularProgressIndicator()))
               : Scaffold(
@@ -321,12 +320,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                           controller.doctorModel,
                                         );
                                         setState(() {
-                                          // _scrollController.animateTo(
-                                          //   0.0,
-                                          //   curve: Curves.easeOut,
-                                          //   duration:
-                                          //   const Duration(milliseconds: 300),
-                                          // );
                                           msgController.clear();
                                         });
                                       }
