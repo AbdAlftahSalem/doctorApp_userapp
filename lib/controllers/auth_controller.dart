@@ -82,7 +82,7 @@ class AuthController extends GetxController {
     if (credential.user != null) {
       FirebaseFirestore.instance
           .collection("Users")
-          .where("phone", isEqualTo: "+970598045064")
+          .where("phone", isEqualTo: phoneNumber)
           .get()
           .then((value) {
         if (value.docs.length == 0) {
